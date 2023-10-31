@@ -193,11 +193,9 @@ in
             let
               basePort = conf.config.ServerPort;
             in
-              (optionals conf.openFirewall [basePort (basePort + 1)]))
+              (optionals conf.openFirewall [basePort (basePort + 2)]))
           (builtins.attrValues enabledServers));
       };
-
-      # systemd.tmpfiles.rules = map (name: "d /var/lib/7-days-to-die-${name} 750 7-days-to-die 7-days-to-die") (builtins.attrNames cfg.servers);
 
       systemd.services = mapAttrs'
         (name: conf:
@@ -232,21 +230,20 @@ in
                 StateDirectory = "7-days-to-die/${name}";
                 WorkingDirectory = "${conf.package}";
 
-                # ExecStart = "${conf.package}/7DaysToDieServer.x86_64 ${concatStringsSep " " args}";
-
-                # ProtectClock = true;
-                # ProtectProc = "noaccess";
-                # ProtectKernelLogs = true;
-                # ProtectKernelModules = true;
-                # ProtectKernelTunables = true;
-                # ProtectControlGroups = true;
-                # ProtectHostname = true;
-                # PrivateDevices = true;
-                # RestrictRealtime = true;
-                # RestrictNamespaces = true;
-                # LockPersonality = true;
-                # MemoryDenyWriteExecute = true;
-                # SystemCallFilter = [ "@system-service" "~@privileged" ];
+                ProtectClock = true;
+                ProtectProc = "noaccess";
+                ProtectKernelLogs = true;
+                ProtectKernelModules = true;
+                ProtectKernelTunables = true;
+                ProtectControlGroups = true;
+                ProtectHostname = true;
+                PrivateDevices = true;
+                RestrictRealtime = true;
+                RestrictNamespaces = true;
+                LockPersonality = true;
+                # Doesn't seem to work. Possibly due to C#
+                MemoryDenyWriteExecute = false; 
+                SystemCallFilter = [ "@system-service" "~@privileged" ];
               };
             };
           }
