@@ -13,6 +13,8 @@
   outputs = inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
+        inputs.flake-parts.flakeModules.easyOverlay
+        ./modules
         ./pkgs
       ];
       systems = [ "x86_64-linux" ];

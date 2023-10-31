@@ -43,7 +43,9 @@ stdenv.mkDerivation rec {
     cp -r ./* $out
 
     # You may need to fix permissions on the main executable.
-    chmod +x $out/startserver.sh $out/7DaysToDieServer.x86_64
+    chmod +x \
+      $out/startserver.sh \
+      $out/7DaysToDieServer.x86_64
 
     runHook postInstall
   '';

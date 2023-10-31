@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 let
   mkPackages = pkgs: {
     "7-days-to-die" = pkgs.callPackage ./7-days-to-die {};
@@ -12,11 +12,12 @@ in
         overlays = [
           inputs.steam-fetcher.overlays.default
         ];
+        config.allowUnfreePredicate = pkg: builtins.elem (inputs.nixpkgs.lib.getName pkg) [
+          "7-days-to-die-server"
+          "steamworks-sdk-redist"
+        ];
       };
     in {
       packages = mkPackages pkgs;
-
     };
-
-  flake.overlays.default = final: prev: (mkPackages final);
 }
