@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   # Skip phases that don't apply to prebuilt binaries.
   dontBuild = true;
   dontConfigure = true;
-  # dontFixup = true;
 
   nativeBuildInputs = [
     autoPatchelfHook

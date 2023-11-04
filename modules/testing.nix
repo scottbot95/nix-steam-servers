@@ -15,6 +15,7 @@ in
       inherit system;
       overlays = [
         self.overlays.default
+        inputs.steam-fetcher.overlays.default
       ];
       config.allowUnfree = true;
     };

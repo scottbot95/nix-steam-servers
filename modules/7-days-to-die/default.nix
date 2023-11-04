@@ -64,7 +64,7 @@ in
 
           # <!-- Networking -->
           ServerPort = mkOpt types.port 26900 "Port you want the server to listen on. Keep it in the ranges 26900 to 26905 or 27015 to 27020 if you want PCs on the same LAN to find it as a LAN server.";
-          ServerVisibility = mkOpt (types.ints.between 0 2) 2 "Visibility of this server: 2 = public, 1 = only shown to friends, 0 = not listed. As you are never friend of a dedicated server setting this to \"1\" will only work when the first player connects manually by IP.";
+          ServerVisibility = mkOpt (types.ints.between 0 2) 0 "Visibility of this server: 2 = public, 1 = only shown to friends, 0 = not listed. As you are never friend of a dedicated server setting this to \"1\" will only work when the first player connects manually by IP.";
           ServerDisabledNetworkProtocols = mkOpt types.str "SteamNetworking" "protocols that should not be used. Separated by comma. Possible values: LiteNetLib, SteamNetworking. Dedicated servers should disable SteamNetworking if there is no NAT router in between your users and the server or when port-forwarding is set up correctly";
           ServerMaxWorldTransferSpeedKiBs = mkOpt types.int 512 "Maximum (!) speed in kiB/s the world is transferred at to a client on first connect if it does not have the world yet. Maximum is about 1300 kiB/s, even if you set a higher value.";
 
@@ -244,11 +244,17 @@ in
                 User = "steam-server";
                 Group = "steam-server";
                 # StateDirectory = "7-days-to-die/${name}";
-                WorkingDirectory = "${conf.package}";
+                WorkingDirectory = "${conf.package}"; # TODO Use datadir with auto-created symlinks to /nix/store for needed files
 
                 ExecStartPre = pkgs.writeShellScript "" ''
                   umask u=rwx,g=rx,o=rx
                   mkdir -p ${conf.datadir}
+
+                  mkdir -p ${baseCfg.datadir}/.steam/sdk64
+
+                  if [[ ! -f ${baseCfg.datadir}/.steam/sdk64/steamclient.so ]]; then
+                    ln -s ${pkgs.steamworks-sdk-redist}/lib/steamclient.so ${baseCfg.datadir}/.steam/sdk64/steamclient.so
+                  fi
                 '';
 
                 ProtectClock = true;

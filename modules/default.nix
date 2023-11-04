@@ -47,6 +47,11 @@ in {
       };
 
       config = mkIf anyServersEnabled {
+
+        nixpkgs.overlays = [
+          inputs.steam-fetcher.overlays.default
+        ];
+
         systemd.tmpfiles.rules = [
           "d ${cfg.datadir} 775 steam-server steam-server"
         ];
