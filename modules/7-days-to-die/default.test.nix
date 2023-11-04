@@ -10,7 +10,7 @@ with lib;
         memorySize = 8192;
       };
 
-      services.steam."7-days-to-die".servers.test = {
+      services.steam-servers."7-days-to-die".test = {
         enable = true;
       };
     };

@@ -2,7 +2,8 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.services.steam."7-days-to-die";
+  baseCfg = config.services.steam-servers;
+  cfg = config.services.steam-servers."7-days-to-die";
   mkOpt = type: default: description: mkOption {
     inherit type default description;
   };
@@ -24,8 +25,8 @@ let
     builtins.toFile "serverconfig.xml" xml;
 in
 {
-  options.services.steam."7-days-to-die".servers = mkOption {
-    type = types.attrsOf (types.submodule ({name, ...}: {
+  options.services.steam-servers."7-days-to-die" = mkOption {
+    type = types.attrsOf (types.submodule ({ config, name, ...}: {
       options = {
         enable = mkEnableOption "7 Day to Die Dedicated Server";
 
@@ -34,6 +35,15 @@ in
           default = self.packages.${pkgs.system}."7-days-to-die";
           defaultText = literalExpression "flake.packages.7-days-to-die";
           description = mdDoc "Package to use for 7 Days to Die binary";
+        };
+
+        datadir = mkOption {
+          type = types.path;
+          default = "${baseCfg.datadir}/7-days-to-die/${name}";
+          defaultText = literalExpression "\${services.steam-servers.datadir}/7-days-to-die/\${name}";
+          description = mdDoc ''
+            Directory to store save state of the game server. (eg world, saves, etc)
+          '';
         };
 
         openFirewall = mkOption {
@@ -81,8 +91,8 @@ in
 
           # <!-- Folder and file locations -->
           AdminFileName = mkOpt types.str "serveradmin.xml" "admin file name. Path relative to the SaveGameFolder";
-          UserDataFolder = mkOpt types.str "/var/lib/7-days-to-die/${name}" "Use this to override where the server stores all generated data, including RWG generated worlds.";
-          SaveGameFolder = mkOpt types.str "/var/lib/7-days-to-die/${name}" "Use this to only override the save game path.";
+          UserDataFolder = mkOpt types.str "${config.datadir}" "Use this to override where the server stores all generated data, including RWG generated worlds.";
+          SaveGameFolder = mkOpt types.str "${config.datadir}" "Use this to only override the save game path.";
 
           # <!-- Other technical settings -->
           EACEnabled = mkOpt types.bool true "Enables/Disables EasyAntiCheat";
@@ -174,7 +184,7 @@ in
           SaveDataLimit = mkOpt types.int (-1) "The maximum disk space allowance for each saved game in megabytes (MB). Saved chunks may be forceably reset to their original states to free up space when this limit is reached. Negative values disable the limit.";
         };
 
-        logFile = mkOpt types.str "/var/lib/7-days-to-die/${name}/output_log__`date +%Y-%m-%d__%H-%M-%S`.txt" "Logfile to output logs to";
+        logFile = mkOpt types.str "${config.datadir}/output_log__`date +%Y-%m-%d__%H-%M-%S`.txt" "Logfile to output logs to";
 
         extraArgs = mkOpt (with types; listOf str) [] "Extra command line arguments to pass to the server";
       };
@@ -184,9 +194,9 @@ in
 
   config =
     let
-      enabledServers = filterAttrs (_: conf: conf.enable) cfg.servers;
+      enabledServers = filterAttrs (_: conf: conf.enable) cfg;
     in
-    mkIf ((builtins.length (builtins.attrNames enabledServers)) > 0) {
+    mkIf (enabledServers != {}) {
       networking.firewall = {
         allowedUDPPorts = flatten (map 
           (conf:
@@ -196,6 +206,12 @@ in
               (optionals conf.openFirewall [basePort (basePort + 2)]))
           (builtins.attrValues enabledServers));
       };
+
+      # systemd.tmpfiles.rules = [
+        
+      # ] ++ (map 
+      #   (conf: "d ${conf.datadir} 750 steam-server steam-server")
+      #   (builtins.attrValues enabledServers));
 
       systemd.services = mapAttrs'
         (name: conf:
@@ -224,11 +240,16 @@ in
 
               serviceConfig = {
                 Restart = "on-failure";
-                DynamicUser = true;
+                # DynamicUser = true;
                 User = "steam-server";
                 Group = "steam-server";
-                StateDirectory = "7-days-to-die/${name}";
+                # StateDirectory = "7-days-to-die/${name}";
                 WorkingDirectory = "${conf.package}";
+
+                ExecStartPre = pkgs.writeShellScript "" ''
+                  umask u=rwx,g=rx,o=rx
+                  mkdir -p ${conf.datadir}
+                '';
 
                 ProtectClock = true;
                 ProtectProc = "noaccess";
