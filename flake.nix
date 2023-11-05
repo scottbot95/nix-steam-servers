@@ -10,7 +10,13 @@
     };
   };
 
-  outputs = inputs@{ flake-parts, ... }:
+  outputs = inputs@{
+    flake-parts,
+    nixpkgs,
+    ...
+  }: let
+    lib = nixpkgs.lib.extend (final: _: import ./lib.nix final);
+  in
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         inputs.flake-parts.flakeModules.easyOverlay
