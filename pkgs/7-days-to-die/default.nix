@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    steamworks-sdk-redist
     gcc-unwrapped
     zlib
   ];
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out
-    cp -r ./* $out
+    mv ./* $out
 
     # You may need to fix permissions on the main executable.
     chmod +x \
