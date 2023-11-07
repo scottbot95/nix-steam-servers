@@ -19,5 +19,7 @@ in
       };
     in {
       packages = mkPackages pkgs;
+
+      overlayAttrs = self'.packages;
     };
 }

@@ -11,9 +11,7 @@ let
   cfg = config.services.steam-servers."7-days-to-die";
 in
 {
-  imports = [
-    (import ./options.nix { inherit self; })
-  ];
+  imports = [ ./options.nix ];
 
   config =
     let
