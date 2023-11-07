@@ -63,7 +63,9 @@
       buildInput = [ options-doc ];
       nativeBuildInputs = [ mdbook ];
 
-      phases = [ "buildPhase" "installPhase" ];
+      # Skip phases that don't matter
+      dontConfigure = true;
+      dontFixup = true;
 
       buildPhase = ''
         ln -s ${options-doc} ${docsPath}
