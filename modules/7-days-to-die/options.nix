@@ -1,19 +1,26 @@
-{ config, pkgs, lib, ... }:
-with lib;
-let
-  baseCfg = config.services.steam-servers;
-  cfg = baseCfg."7-days-to-die";
-  mkOpt = type: default: description: mkOption {
-    inherit type default;
-    description = mdDoc description;
-  };
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  baseCfg = config.services.steam-servers;
+  mkOpt = type: default: description:
+    mkOption {
+      inherit type default;
+      description = mdDoc description;
+    };
+in {
   options.services.steam-servers."7-days-to-die" = mkOption {
     description = mdDoc ''
       Options to configure one or more 7 Days to Die servers.
     '';
-    type = types.attrsOf (types.submodule ({ config, name, ...}: {
+    type = types.attrsOf (types.submodule ({
+      config,
+      name,
+      ...
+    }: {
       options = {
         enable = mkEnableOption (mdDoc "7 Day to Die Dedicated Server");
 
@@ -158,7 +165,6 @@ in
           LandClaimOfflineDurabilityModifier = mkOpt types.int 4 "How much protected claim area block hardness is increased when a player is offline. 0 means infinite (no damage will ever be taken). Default is 4x";
           LandClaimOfflineDelay = mkOpt types.int 0 "The number of minutes after a player logs out that the land claim area hardness transitions from online to offline. Default is 0";
 
-
           DynamicMeshEnabled = mkOpt types.bool true "Is Dynamic Mesh system enabled";
           DynamicMeshLandClaimOnly = mkOpt types.bool true "Is Dynamic Mesh system only active in player LCB areas";
           DynamicMeshLandClaimBuffer = mkOpt types.int 3 "Dynamic Mesh LCB chunk radius";
@@ -174,6 +180,6 @@ in
         extraArgs = mkOpt (with types; listOf str) [] "Extra command line arguments to pass to the server";
       };
     }));
-    default = { };
+    default = {};
   };
 }

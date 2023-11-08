@@ -9,6 +9,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # flake-parts
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+    flake-root.url = "github:srid/flake-root";
+
     # utils
     devshell = {
       url = "github:numtide/devshell";
@@ -24,7 +31,7 @@
     };
   };
 
-  outputs = inputs@{
+  outputs = inputs @ {
     flake-parts,
     nixpkgs,
     ...
@@ -33,23 +40,24 @@
   in
     flake-parts.lib.mkFlake {
       inherit inputs;
-      specialArgs = { inherit lib; };
+      specialArgs = {inherit lib;};
     } {
       imports = [
         inputs.devshell.flakeModule
-        inputs.flake-parts.flakeModules.easyOverlay 
-        # inputs.treefmt-nix.flakeModule
+        inputs.flake-parts.flakeModules.easyOverlay
+        inputs.flake-root.flakeModule
+        inputs.treefmt-nix.flakeModule
         ./flake-shell.nix
+        ./formatter.nix
         ./mkdocs.nix
         ./modules
         ./pkgs
       ];
-      systems = [ "x86_64-linux" ];
+      systems = ["x86_64-linux"];
       flake = {
         # The usual flake attributes can be defined here, including system-
         # agnostic ones like nixosModule and system-enumerating ones, although
         # those are more easily expressed in perSystem.
-
       };
     };
 }

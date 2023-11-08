@@ -26,18 +26,18 @@
 
       eachOptionsDoc = with lib;
         mapAttrs' (
-          name: value: let 
+          name: value: let
             isTopLevel = name == "options";
             trimmedName =
-              if isTopLevel then 
-                "toplevel"
-              else
-                (head (splitString "." name));
+              if isTopLevel
+              then "toplevel"
+              else (head (splitString "." name));
             modules = (optionals (!isTopLevel) [baseOptionsModule]) ++ [value];
-          in nameValuePair
+          in
+            nameValuePair
             trimmedName
             # generate options doc
-            (pkgs.nixosOptionsDoc { options = evalModules { inherit modules; }; })
+            (pkgs.nixosOptionsDoc {options = evalModules {inherit modules;};})
         )
         eachOptions;
 
@@ -60,8 +60,8 @@
       src = ./.;
       name = "nix-steam-servers-docs";
 
-      buildInput = [ options-doc ];
-      nativeBuildInputs = [ mdbook ];
+      buildInput = [options-doc];
+      nativeBuildInputs = [mdbook];
 
       # Skip phases that don't matter
       dontConfigure = true;

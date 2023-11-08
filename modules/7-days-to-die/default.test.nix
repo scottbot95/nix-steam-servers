@@ -1,6 +1,5 @@
-{ pkgs, lib, ... }:
-with lib;
-{
+{lib, ...}:
+with lib; {
   name = "7-days-to-die";
 
   nodes = {

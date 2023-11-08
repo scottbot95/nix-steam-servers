@@ -1,5 +1,4 @@
-args@{ inputs, ... }:
-let
+args @ {inputs, ...}: let
   modules = {
     "7-days-to-die" = import ./7-days-to-die args;
   };
@@ -8,22 +7,28 @@ in {
     ./testing.nix
   ];
 
-  flake.nixosModules.default = {config, lib, ...}: 
-    with lib;
-    let
+  flake.nixosModules.default = {
+    config,
+    lib,
+    ...
+  }:
+    with lib; let
       cfg = config.services.steam-servers;
-      anyServersEnabled = any 
-        (game: any
+      anyServersEnabled =
+        any
+        (game:
+          any
           (serverConf: serverConf.enable)
           (builtins.attrValues cfg.${game}))
         (builtins.attrNames modules);
     in {
-      imports = [
-        ./options.nix
-      ] ++ (builtins.attrValues modules);
+      imports =
+        [
+          ./options.nix
+        ]
+        ++ (builtins.attrValues modules);
 
       config = mkIf anyServersEnabled {
-
         nixpkgs.overlays = [
           inputs.steam-fetcher.overlays.default
         ];

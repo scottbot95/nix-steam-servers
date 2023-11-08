@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchSteam
-, autoPatchelfHook
-, steamworks-sdk-redist
-, gcc-unwrapped
-, zlib
+{
+  lib,
+  stdenv,
+  fetchSteam,
+  autoPatchelfHook,
+  gcc-unwrapped,
+  zlib,
 }:
 stdenv.mkDerivation rec {
   name = "7-days-to-die-server";

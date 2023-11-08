@@ -1,9 +1,11 @@
-{ config, lib, ... }:
-with lib;
-let 
-  cfg = config.services.steam-servers;
-in 
 {
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.services.steam-servers;
+in {
   options.services.steam-servers = {
     datadir = mkOption {
       type = types.path;
