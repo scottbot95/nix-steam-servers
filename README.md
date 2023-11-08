@@ -1,6 +1,6 @@
 # nix-steam-server
 <div align="center">
-  <img src="https://img.shields.io/github/actions/workflow/status/scottbot95/nix-steam-servers/checks.yaml" alt="Build status"/>
+  <a href="https://garnix.io"><img alt="built with garnix" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fgarnix.io%2Fapi%2Fbadges%2Fscottbot95%2Fnix-steam-servers%3Fbranch%3Dmaster"></a>
   <img src="https://img.shields.io/github/actions/workflow/status/scottbot95/nix-steam-servers/gh-pages.yaml?label=docs" alt="Docs status"/>
 </div>
 
