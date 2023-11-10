@@ -6,11 +6,8 @@
 }:
 with lib; let
   baseCfg = config.services.steam-servers;
-  mkOpt = type: default: description:
-    mkOption {
-      inherit type default;
-      description = mdDoc description;
-    };
+  moduleLib = import ../lib.nix lib;
+  inherit (moduleLib) mkOpt;
 in {
   options.services.steam-servers."7-days-to-die" = mkOption {
     description = mdDoc ''
