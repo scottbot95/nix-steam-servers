@@ -1,11 +1,16 @@
 {
   self,
   inputs,
+  lib,
   ...
 }: let
-  tests = {
-    "7-days-to-die-default" = ./7-days-to-die/default.test.nix;
-  };
+  eachTest = with lib;
+    filterAttrs
+    (_name: hasSuffix ".test.nix")
+    (flattenTree {
+      tree = rakeLeaves ./.;
+      separator = "-";
+    });
 in {
   perSystem = {
     system,
@@ -44,7 +49,7 @@ in {
         })
         .config
         .result)
-      tests;
+      eachTest;
   in {
     inherit checks;
   };

@@ -1,8 +1,20 @@
-args @ {inputs, ...}: let
-  modules = {
-    "7-days-to-die" = import ./7-days-to-die args;
-    "servers" = import ./servers args;
-  }; # TODO use rakeLeaves
+args @ {
+  inputs,
+  lib,
+  ...
+}: let
+  eachModule = with lib;
+    filterAttrs
+    (name: file: (name != "default") && (hasSuffix "default.nix" file))
+    (flattenTree {tree = rakeLeaves ./.;});
+
+  modules = with lib;
+    mapAttrs'
+    (name: file:
+      nameValuePair
+      (removeSuffix ".default" name)
+      (import file args))
+    eachModule;
 in {
   imports = [
     ./testing.nix
