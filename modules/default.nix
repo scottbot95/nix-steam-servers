@@ -1,7 +1,8 @@
 args @ {inputs, ...}: let
   modules = {
     "7-days-to-die" = import ./7-days-to-die args;
-  };
+    "servers" = import ./servers args;
+  }; # TODO use rakeLeaves
 in {
   imports = [
     ./testing.nix
@@ -14,13 +15,10 @@ in {
   }:
     with lib; let
       cfg = config.services.steam-servers;
-      anyServersEnabled =
+      anyServersEnabled = 
         any
-        (game:
-          any
-          (serverConf: serverConf.enable)
-          (builtins.attrValues cfg.${game}))
-        (builtins.attrNames modules);
+        (conf: conf.enable)
+        (builtins.attrValues cfg.servers);
     in {
       imports =
         [
@@ -33,9 +31,25 @@ in {
           inputs.steam-fetcher.overlays.default
         ];
 
-        systemd.tmpfiles.rules = [
-          "d ${cfg.datadir} 775 steam-server steam-server"
-        ];
+        # Can't use tmpfiles because tmpfiles won't create directories with different owner than parent
+        systemd.services."make-steam-servers-dir" = let 
+          services =
+            map 
+              (name: "${name}.service")
+              (builtins.attrNames cfg.servers);
+        in {
+          wantedBy = services;
+          before = services;
+
+          script = ''
+            mkdir -p ${cfg.datadir}
+            chown ${cfg.user}:${cfg.group} ${cfg.datadir}
+          '';
+
+          serviceConfig = {
+            Type = "oneshot";
+          };
+        };
 
         users.users.${cfg.user} = {
           isSystemUser = true;

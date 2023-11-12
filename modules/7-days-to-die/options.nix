@@ -31,7 +31,7 @@ in {
         datadir = mkOption {
           type = types.path;
           default = "${baseCfg.datadir}/7-days-to-die/${name}";
-          defaultText = literalExpression "\${baseCfg.datadir}/7-days-to-die/\${name}";
+          defaultText = literalExpression "\${services.steam-servers.datadir}/7-days-to-die/\${name}";
           description = mdDoc ''
             Directory to store save state of the game server. (eg world, saves, etc)
           '';

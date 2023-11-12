@@ -76,15 +76,19 @@
         mv book $out
       '';
 
-      passthru.serve = pkgs.writeShellScriptBin "server" ''
-        set -euo pipefail
+      passthru = {
+        inherit options-doc;
 
-        # link in options reference
-        rm -f ${docsPath}
-        ln -s ${options-doc} ${docsPath} # TODO auto-update this somehow...
+        serve = pkgs.writeShellScriptBin "server" ''
+          set -euo pipefail
 
-        ${mdbook}/bin/mdbook serve "$@"
-      '';
+          # link in options reference
+          rm -f ${docsPath}
+          ln -s ${options-doc} ${docsPath} # TODO auto-update this somehow...
+
+          ${mdbook}/bin/mdbook serve "$@"
+        '';
+      };
     };
 
     devshells.default.commands = let

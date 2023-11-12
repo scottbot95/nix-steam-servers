@@ -1,29 +1,62 @@
 lib:
-with lib; {
+with lib; let
+  formatExtensions = with pkgs.formats; {
+    "yml" = yaml {};
+    "yaml" = yaml {};
+    "json" = json {};
+    "props" = keyValue {};
+    "properties" = keyValue {};
+    "toml" = toml {};
+    "ini" = ini {};
+  };
+
+  inferFormat = name: let
+    error = throw "nix-steam-servers: Could not infer format from file '${name}'. Specify one using 'format'.";
+    extension = builtins.match "[^.]*\\.(.+)" name;
+  in
+    if extension != null && extension != []
+    then formatExtensions.${head extension} or error
+    else error;
+  getFormat = name: config:
+    if config ? format && config.format != null
+    then config.format
+    else inferFormat name;
+  configToPath = name: config:
+    if isStringLike config # Includes paths and packages
+    then config
+    else (getFormat name config).generate name config.value;
+
+  nonEmpty = x: x != {} && x != [];
+  nonEmptyValue = x: nonEmpty x && (x ? value -> nonEmpty x.value);
+  normalizeFiles = files: mapAttrs configToPath (filterAttrs (_: nonEmptyValue) files);
+
+  configType = types.submodule {
+    options = {
+      format = mkOption {
+        type = with types; nullOr attrs;
+        default = null;
+        description = ''
+          The format to use when converting "value" into a file. If set to
+          null (the default), we'll try to infer it from the file name.
+        '';
+        example = literalExpression "pkgs.formats.yaml { }";
+      };
+      value = mkOption {
+        type = with types; either (attrsOf anything) (listOf anything);
+        description = ''
+          A value that can be converted into the specified format.
+        '';
+      };
+    };
+  };
+in {
+  inherit normalizeFiles configType;
+
   mkOpt = type: default: description:
     mkOption {
       inherit type default;
       description = mdDoc description;
     };
-
-  writeXML = name: value: let
-    properies =
-      mapAttrsToList
-      (name: propVal: let
-        encoded =
-          if (builtins.typeOf propVal) == "bool"
-          then boolToString propVal
-          else toString propVal;
-      in "<property name=\"${name}\" value=\"${encoded}\"/>")
-      value;
-    xml = ''
-      <?xml version="1.0"?>
-      <ServerSettings>
-        ${concatStringsSep "\n  " properies}
-      </ServerSettings>
-    '';
-  in
-    builtins.toFile name xml;
 
   mkSymlinks = pkgs: name: symlinks:
     pkgs.writeShellScript "${name}-symlinks"
