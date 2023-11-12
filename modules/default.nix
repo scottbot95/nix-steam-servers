@@ -15,7 +15,7 @@ in {
   }:
     with lib; let
       cfg = config.services.steam-servers;
-      anyServersEnabled = 
+      anyServersEnabled =
         any
         (conf: conf.enable)
         (builtins.attrValues cfg.servers);
@@ -32,11 +32,11 @@ in {
         ];
 
         # Can't use tmpfiles because tmpfiles won't create directories with different owner than parent
-        systemd.services."make-steam-servers-dir" = let 
+        systemd.services."make-steam-servers-dir" = let
           services =
-            map 
-              (name: "${name}.service")
-              (builtins.attrNames cfg.servers);
+            map
+            (name: "${name}.service")
+            (builtins.attrNames cfg.servers);
         in {
           wantedBy = services;
           before = services;

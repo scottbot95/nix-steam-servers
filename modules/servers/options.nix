@@ -1,4 +1,8 @@
-{config, lib, ...}:
+{
+  config,
+  lib,
+  ...
+}:
 with lib; let
   moduleLib = import ../lib.nix lib;
   inherit (moduleLib) mkOpt configType;
