@@ -3,26 +3,10 @@
     "7-days-to-die" = pkgs.callPackage ./7-days-to-die {};
   };
 in {
-  perSystem = {
-    config,
-    self',
-    system,
-    ...
-  }: let
-    pkgs = import inputs.nixpkgs {
-      inherit system;
-      overlays = [
-        inputs.steam-fetcher.overlays.default
-      ];
-      config.allowUnfreePredicate = pkg:
-        builtins.elem (inputs.nixpkgs.lib.getName pkg) [
-          "7-days-to-die-server"
-          "steamworks-sdk-redist"
-        ];
-    };
-  in {
-    packages = mkPackages pkgs;
-
-    overlayAttrs = self'.packages;
+  perSystem = {pkgs, ...}: {
+    packages = mkPackages (pkgs.extend inputs.steam-fetcher.overlays.default);
   };
+
+  # Don't use easyOverlay/packages from perSystem to propogate allowUnfree settings
+  flake.overlays.default = final: _: (mkPackages final);
 }

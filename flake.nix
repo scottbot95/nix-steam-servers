@@ -49,7 +49,6 @@
     } {
       imports = [
         inputs.devshell.flakeModule
-        inputs.flake-parts.flakeModules.easyOverlay
         inputs.flake-root.flakeModule
         inputs.treefmt-nix.flakeModule
         ./flake-shell.nix
