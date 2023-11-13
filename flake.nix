@@ -1,11 +1,6 @@
 {
   description = "Nix Flake for managing various steam servers";
 
-  nixConfig = {
-    extra-substituters = ["https://cache.garnix.io"];
-    extra-trusted-public-keys = ["cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="];
-  };
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
 
