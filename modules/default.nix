@@ -1,4 +1,5 @@
-args @ {
+{
+  self,
   inputs,
   lib,
   ...
@@ -10,10 +11,9 @@ args @ {
 
   modules = with lib;
     mapAttrs'
-    (name: file:
+    (name:
       nameValuePair
-      (removeSuffix ".default" name)
-      (import file args))
+      (removeSuffix ".default" name))
     eachModule;
 in {
   imports = [
@@ -40,6 +40,7 @@ in {
 
       config = mkIf anyServersEnabled {
         nixpkgs.overlays = [
+          self.overlays.default
           inputs.steam-fetcher.overlays.default
         ];
 
