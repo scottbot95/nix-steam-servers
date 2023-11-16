@@ -2,7 +2,13 @@
 
 - [Introduction](./intro.md)
 
-# Appendix
+# User Guide
+
+- [Installation](./guide/installation.md)
+- [Basic Usage](./guide/basic.md)
+- [Advanced Usage](./guide/advanced.md)
+
+# Modules Reference
 
 - [services.steam-servers](./reference/module-options/toplevel.md)
   - [servers](./reference/module-options/servers.md)

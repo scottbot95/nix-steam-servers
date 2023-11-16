@@ -47,8 +47,8 @@ with lib; let
 
       worldName = mkOption {
         type = types.str;
-        default = config.worldType;
-        defaultText = literalExpression "\${config.worldType}";
+        default = name;
+        defaultText = literalExpression "\${name}";
         description = mdDoc ''
           Name of the save game to use. A new world of type `worldType` will be
           created of save does not exist.
