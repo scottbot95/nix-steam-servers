@@ -2,8 +2,10 @@
 authors = ["Scott Techau"]
 language = "en"
 multilingual = false
-src = "docs"
 title = "Nix Steam Servers"
 
 [build]
 build-dir = "book"
+
+[output.html]
+git-repository-url = "https://github.com/scottbot95/nix-steam-servers"
