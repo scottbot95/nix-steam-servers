@@ -32,14 +32,17 @@ in {
     enabledServers = filterAttrs (_: conf: conf.enable) cfg;
   in
     mkIf (enabledServers != {}) {
-      networking.firewall = {
-        allowedUDPPorts = flatten (map
-          (conf: let
-            basePort = conf.config.ServerPort;
-          in
-            optionals conf.openFirewall [basePort (basePort + 2)])
+      networking.firewall =
+        mkMerge
+        (map
+          (conf:
+            mkIf conf.openFirewall {
+              allowedUDPPorts = [
+                conf.config.ServerPort
+                (conf.config.ServerPort + 2)
+              ];
+            })
           (builtins.attrValues enabledServers));
-      };
 
       systemd.services =
         mapAttrs'
@@ -88,7 +91,7 @@ in {
         in
           nameValuePair "7-days-to-die-${name}" {
             inherit args symlinks;
-            inherit (conf) enable;
+            inherit (conf) enable datadir;
 
             executable = "./7DaysToDieServer.x86_64";
           })

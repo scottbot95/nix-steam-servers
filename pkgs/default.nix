@@ -1,7 +1,17 @@
-{inputs, ...}: let
-  overlay = pkgs: _: {
-    "7-days-to-die" = pkgs.callPackage ./7-days-to-die {};
+{
+  inputs,
+  lib,
+  ...
+}: let
+  pkgsToImport = {
+    "7-days-to-die" = ./7-days-to-die;
+    stationeers = ./stationeers;
   };
+
+  overlay = pkgs: _:
+    lib.mapAttrs
+    (_: file: pkgs.callPackage file {})
+    pkgsToImport;
 in {
   perSystem = {
     config,
@@ -19,6 +29,10 @@ in {
   in {
     packages = {
       "7-days-to-die" = pkgs."7-days-to-die";
+      inherit
+        (pkgs)
+        stationeers
+        ;
     };
   };
 
