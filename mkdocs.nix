@@ -54,10 +54,10 @@
         ${statements}
       '';
 
-    docsPath = "./src/reference/module-options";
+    docsPath = "./docs/reference/module-options";
   in {
     packages.docs = stdenv.mkDerivation {
-      src = ./docs;
+      src = ./.;
       name = "nix-steam-servers-docs";
 
       buildInput = [options-doc];
@@ -81,8 +81,6 @@
 
         serve = pkgs.writeShellScriptBin "server" ''
           set -euo pipefail
-
-          cd docs
 
           # link in options reference
           rm -f ${docsPath}

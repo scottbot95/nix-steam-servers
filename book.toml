@@ -3,6 +3,7 @@ authors = ["Scott Techau"]
 language = "en"
 multilingual = false
 title = "Nix Steam Servers"
+src = "docs"
 
 [build]
 build-dir = "book"
