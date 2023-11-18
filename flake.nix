@@ -25,10 +25,6 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    devour-flake = {
-      url = "github:srid/devour-flake";
-      flake = false;
-    };
   };
 
   outputs = inputs @ {

@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "devour-flake": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1694098737,
-        "narHash": "sha256-O51F4YFOzlaQAc9b6xjkAqpvrvCtw/Os2M7TU0y4SKQ=",
-        "owner": "srid",
-        "repo": "devour-flake",
-        "rev": "30a34036b29b0d12989ef6c8be77aa949d85aef5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "srid",
-        "repo": "devour-flake",
-        "type": "github"
-      }
-    },
     "devshell": {
       "inputs": {
         "nixpkgs": [
@@ -90,7 +74,6 @@
     },
     "root": {
       "inputs": {
-        "devour-flake": "devour-flake",
         "devshell": "devshell",
         "flake-parts": "flake-parts",
         "flake-root": "flake-root",
