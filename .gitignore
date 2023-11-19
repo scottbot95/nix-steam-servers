@@ -1,3 +1,7 @@
+# Nix outputs
 /result
+
+# mdBook
 /book
 /docs/reference/module-options
+/docs/SUMMARY.md

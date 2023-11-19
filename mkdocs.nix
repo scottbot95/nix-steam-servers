@@ -18,12 +18,22 @@
       };
     };
 
-    options-doc = let
-      eachOptions = with lib;
-        filterAttrs
-        (_: hasSuffix "options.nix")
-        (flattenTree {tree = rakeLeaves ./modules;});
+    eachOptions = with lib; 
+      filterAttrs
+      (_: hasSuffix "options.nix")
+      (flattenTree {tree = rakeLeaves ./modules;});
 
+    book-summary = with lib;
+      let 
+        notTopLevel = filterAttrs (n: _: n != "options") eachOptions;
+        modules = mapAttrsToList 
+          (n: _: { name = "${head (splitString "." n)}"; } )
+          notTopLevel;
+      in templateFile pkgs "SUMMARY.md" ./docs/SUMMARY.md.mustache {
+        inherit modules;
+      };
+
+    options-doc = let
       eachOptionsDoc = with lib;
         mapAttrs' (
           name: value: let
@@ -68,6 +78,7 @@
       dontFixup = true;
 
       buildPhase = ''
+        ln -s ${book-summary} ./docs/SUMMARY.md
         ln -s ${options-doc} ${docsPath}
         mdbook build
       '';
@@ -83,7 +94,8 @@
           set -euo pipefail
 
           # link in options reference
-          rm -f ${docsPath}
+          rm -f ${docsPath} ./docs/SUMMARY.md
+          ln -s ${book-summary} ./docs/SUMMARY.md
           ln -s ${options-doc} ${docsPath} # TODO auto-update this somehow...
 
           ${mdbook}/bin/mdbook serve "$@"

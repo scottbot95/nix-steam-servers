@@ -70,4 +70,41 @@ lib: rec {
     files = builtins.readDir dirPath;
   in
     lib.filterAttrs (_n: v: v != {}) (lib.mapAttrs' collect files);
+
+  /*
+  Function: templateFile
+  Synopsis: Renders a given `template` into a store path with `name` using `data`
+
+  Parameters:
+    - pkgs (nixpkgs): Reference to pkgs. Needed to call `mkDerivaiton`
+    - name (string): The name of the file to create
+    - template (path): The Mustache template file to render
+    - data (attrs): Data that will be converted to json and made available to the template
+  
+  Returns:
+    - The /nix/store path of the rendered file
+  */
+  templateFile = pkgs: name: template: data:
+    pkgs.stdenv.mkDerivation {
+
+      name = "${name}";
+
+      nativeBuildInpts = [ pkgs.mustache-go ];
+
+      # Pass Json as file to avoid escaping
+      passAsFile = [ "jsonData" ];
+      jsonData = builtins.toJSON data;
+
+      # Disable phases which are not needed. In particular the unpackPhase will
+      # fail, if no src attribute is set
+      phases = [ "buildPhase" "installPhase" ];
+
+      buildPhase = ''
+        ${pkgs.mustache-go}/bin/mustache $jsonDataPath ${template} > rendered_file
+      '';
+
+      installPhase = ''
+        cp rendered_file $out
+      '';
+    };
 }
