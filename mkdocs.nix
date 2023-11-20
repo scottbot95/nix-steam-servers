@@ -18,18 +18,19 @@
       };
     };
 
-    eachOptions = with lib; 
+    eachOptions = with lib;
       filterAttrs
       (_: hasSuffix "options.nix")
       (flattenTree {tree = rakeLeaves ./modules;});
 
-    book-summary = with lib;
-      let 
-        notTopLevel = filterAttrs (n: _: n != "options") eachOptions;
-        modules = mapAttrsToList 
-          (n: _: { name = "${head (splitString "." n)}"; } )
-          notTopLevel;
-      in templateFile pkgs "SUMMARY.md" ./docs/SUMMARY.md.mustache {
+    book-summary = with lib; let
+      notTopLevel = filterAttrs (n: _: n != "options") eachOptions;
+      modules =
+        mapAttrsToList
+        (n: _: {name = "${head (splitString "." n)}";})
+        notTopLevel;
+    in
+      templateFile pkgs "SUMMARY.md" ./docs/SUMMARY.md.mustache {
         inherit modules;
       };
 

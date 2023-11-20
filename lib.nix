@@ -80,24 +80,23 @@ lib: rec {
     - name (string): The name of the file to create
     - template (path): The Mustache template file to render
     - data (attrs): Data that will be converted to json and made available to the template
-  
+
   Returns:
     - The /nix/store path of the rendered file
   */
   templateFile = pkgs: name: template: data:
     pkgs.stdenv.mkDerivation {
-
       name = "${name}";
 
-      nativeBuildInpts = [ pkgs.mustache-go ];
+      nativeBuildInpts = [pkgs.mustache-go];
 
       # Pass Json as file to avoid escaping
-      passAsFile = [ "jsonData" ];
+      passAsFile = ["jsonData"];
       jsonData = builtins.toJSON data;
 
       # Disable phases which are not needed. In particular the unpackPhase will
       # fail, if no src attribute is set
-      phases = [ "buildPhase" "installPhase" ];
+      phases = ["buildPhase" "installPhase"];
 
       buildPhase = ''
         ${pkgs.mustache-go}/bin/mustache $jsonDataPath ${template} > rendered_file
