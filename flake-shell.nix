@@ -1,5 +1,6 @@
 {
   perSystem = {
+    config,
     pkgs,
     # pkgsUnstable,
     ...
@@ -10,6 +11,11 @@
         nix-update
         mdbook
       ];
+      devshell.startup = {
+        pre-commit-hook.text = ''
+          ${config.pre-commit.installationScript}
+        '';
+      };
     };
   };
 }

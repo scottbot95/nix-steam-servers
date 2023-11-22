@@ -5,3 +5,6 @@
 /book
 /docs/reference/module-options
 /docs/SUMMARY.md
+
+# per-commit
+.pre-commit-config.yaml

@@ -25,6 +25,10 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {
@@ -41,7 +45,9 @@
       imports = [
         inputs.devshell.flakeModule
         inputs.flake-root.flakeModule
+        inputs.pre-commit-hooks.flakeModule
         inputs.treefmt-nix.flakeModule
+        ./checks.nix
         ./flake-shell.nix
         ./formatter.nix
         ./mkdocs.nix
