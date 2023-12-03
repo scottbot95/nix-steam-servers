@@ -2,7 +2,7 @@
   description = "Nix Flake for managing various steam servers";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
 
     steam-fetcher = {
       url = "github:aidalgol/nix-steam-fetcher";
