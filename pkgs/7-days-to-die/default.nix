@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
     inherit name;
     appId = "294420";
     depotId = "294422";
-    manifestId = " 4485042179748822610";
+    manifestId = "1977371197884973023";
     # Fetch a different branch. <https://partner.steamgames.com/doc/store/application/branches>
     # branch = "beta_name";
     # Enable debug logging from DepotDownloader.
     # debug = true;
-    hash = "sha256-S2xCAZj8/KPen2yKb10923ZS74cC8tNxu6qvICmwaH8=";
+    hash = "sha256-occY0s1Co05Jw+SiK4VwXS3RsL2SceKVNVqnLo+vTDE=";
   };
 
   # Skip phases that don't apply to prebuilt binaries.
