@@ -1,5 +1,4 @@
 {
-  config,
   inputs,
   lib,
   ...
@@ -12,7 +11,7 @@
   overlay = pkgs: _:
     lib.mapAttrs
     (_: file: pkgs.callPackage file {})
-    pkgsToImport;
+    (pkgsToImport // {mkSteamPackage = ./mkSteamPackage.nix;});
 in {
   perSystem = {
     config,
@@ -28,7 +27,8 @@ in {
       config.allowUnfree = true;
     };
   in {
-    packages = lib.filterAttrs
+    packages =
+      lib.filterAttrs
       (k: _: builtins.hasAttr k pkgsToImport)
       pkgs;
   };

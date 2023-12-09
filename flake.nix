@@ -47,6 +47,7 @@
         inputs.flake-root.flakeModule
         inputs.pre-commit-hooks.flakeModule
         inputs.treefmt-nix.flakeModule
+        ./apps
         ./checks.nix
         ./flake-shell.nix
         ./formatter.nix

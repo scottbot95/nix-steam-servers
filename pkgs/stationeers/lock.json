@@ -1,0 +1,38 @@
+{
+  "appId": 600760,
+  "depotId": 600762,
+  "name": "stationeers-server",
+  "branches": {
+    "public": "12001212",
+    "beta": "12919949",
+    "devbranch": "11423122",
+    "previous": "11427657"
+  },
+  "builds": {
+    "11423122": {
+      "hash": "sha256-xRZVW+2zYRuQ+p+XdO1Jk8/nlnn5Nc9dYvK+L4JVqCI=\n",
+      "manifestId": "7260948663136071317",
+      "version": "11423122"
+    },
+    "11427657": {
+      "hash": "sha256-VU3By9NVAq3LE5ZJwQSTV/RDk7la3nMpy7X3OM5MnFM=\n",
+      "manifestId": "2070487081457163010",
+      "version": "11427657"
+    },
+    "12001212": {
+      "hash": "sha256-72h9LBbkMUWVz8tZqaPuPFy2NbigKjaYaJPKU8llcR4=\n",
+      "manifestId": "6111669730390933276",
+      "version": "0.2.4297.19997"
+    },
+    "12917671": {
+      "hash": "sha256-kc3YIutUFENSmmHSFTZMr75StP86rktJBJpVlow99Zg=\n",
+      "manifestId": "1075859997789966079",
+      "version": "12917671"
+    },
+    "12919949": {
+      "hash": "sha256-2TDX7SUO+Cf0JCoPci/IwX4QWzknQO4eAxE70G5+v3U=\n",
+      "manifestId": "477449961210087218",
+      "version": "0.2.4645.21499"
+    }
+  }
+}

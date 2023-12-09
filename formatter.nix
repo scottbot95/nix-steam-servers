@@ -21,7 +21,7 @@
         category = "Tools";
         name = "fmt";
         help = "Format the source tree";
-        command = "nix fmt";
+        command = "nix fmt -- \"$@\"";
       }
     ];
   };
