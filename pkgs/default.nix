@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   lib,
   ...
@@ -27,13 +28,9 @@ in {
       config.allowUnfree = true;
     };
   in {
-    packages = {
-      "7-days-to-die" = pkgs."7-days-to-die";
-      inherit
-        (pkgs)
-        stationeers
-        ;
-    };
+    packages = lib.filterAttrs
+      (k: _: builtins.hasAttr k pkgsToImport)
+      pkgs;
   };
 
   # Don't use easyOverlay/packages from perSystem to propogate allowUnfree settings

@@ -98,7 +98,7 @@ in {
           # <!-- World -->
           GameWorld = mkOpt types.str "Navezgane" ''
             "RWG" (see WorldGenSeed and WorldGenSize options below) or any already existing world name
-            in the Worlds folder (currently shipping with e.g. "Navezgane", "PREGEN01", ...)
+            in the Worlds folder (currently shipping with e.g. "Navezgane", "PREGEN6k", "PREGEN8k", "PREGEN10k", ...)
           '';
           WorldGenSeed = mkOpt types.str "asdf" "If RWG this is the seed for the generation of the new world. If a world with the resulting name already exists it will simply load it";
           WorldGenSize = mkOpt types.int 6144 "If RWG, this controls the width and height of the created world. Officially supported sizes are between 6144 and 10240 and must be a multiple of 2048, e.g. 6144, 8192, 10240.";
