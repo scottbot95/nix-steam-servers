@@ -4,7 +4,7 @@
   "name": "stationeers-server",
   "branches": {
     "public": "12001212",
-    "beta": "12919949",
+    "beta": "12923784",
     "devbranch": "11423122",
     "previous": "11427657"
   },
@@ -33,6 +33,11 @@
       "hash": "sha256-2TDX7SUO+Cf0JCoPci/IwX4QWzknQO4eAxE70G5+v3U=\n",
       "manifestId": "477449961210087218",
       "version": "0.2.4645.21499"
+    },
+    "12923784": {
+      "hash": "sha256-9OPJtnPVloQJN8IzT1v3pe9K3IV9/k0GLFqWrQ8Vo6U=\n",
+      "manifestId": "5167670279537842837",
+      "version": "12923784"
     }
   }
 }
