@@ -17,7 +17,7 @@
         nix-update
         mdbook
         deno
-        # steamcmd
+        steamcmd
       ];
       commands = [
         {

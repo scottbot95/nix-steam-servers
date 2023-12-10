@@ -1,0 +1,51 @@
+name: "Update Package Locks"
+permissions:
+    contents: write
+    pull-requests: write
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 10 * * 0" # https://crontab.guru/#0_10_*_*_0
+jobs:
+  update_packages:
+    runs-on: ubuntu-latest
+    outputs:
+      changes: ${{ steps.update.outputs.changes }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install Nix
+        uses: cachix/install-nix-action@v20
+      - name: Update package locks
+        id: update
+        run: |
+          nix develop -c update-servers
+
+          CHANGES=$(git status --porcelain)
+          echo "changes=${CHANGES}" >> $GITHUB_OUTPUT
+      - name: Create commit
+        if: ${{ steps.update.outputs.changes != ''}}
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git switch -c update_package_lock_action
+          git add .
+          git commit -m "chore: Update package locks"
+          git push origin update_package_lock_action --force
+      - name: Create Pull Request
+        if: ${{ steps.update.outputs.changes != ''}}
+        run: |
+          gh pr create \
+            -B master \
+            -H update_package_lock_action \
+            --title 'chore: update package' \
+            --body '
+          Update branches to latest builds and import new builds.
+
+          ### Tasks for reviewer:
+          - [ ] Ensure all automated tests still pass
+          - [ ] Update `version` field of newly imported builds with version number used in-game
+
+          Created by Github action'
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
