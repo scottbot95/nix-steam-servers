@@ -13,7 +13,7 @@ mkSteamPackage {
   ];
 
   meta = with lib; {
-    description = "7 Days to Die dedicated server";
+    description = "Stationeers Dedicated server";
     homepage = "https://steamdb.info/app/600760/";
     changelog = "https://store.steampowered.com/news/app/544550?updates=true";
     sourceProvenance = with sourceTypes; [
