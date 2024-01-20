@@ -1,6 +1,8 @@
 import { parseArgs } from 'https://deno.land/std@0.208.0/cli/parse_args.ts';
 import { LockFile, SteamObject, parseObject } from './parser.ts'
 
+const utf8Decoder = new TextDecoder();
+
 /**
  * Recursively find all files matching `fileName` under `baseDir`
  * 
@@ -31,7 +33,7 @@ const getAppInfo = async (appId: number): Promise<SteamObject> => {
     ],
   });
   const app_info_bytes = (await steamcmd.output()).stdout;
-  const app_info_str = new TextDecoder().decode(app_info_bytes);
+  const app_info_str = utf8Decoder.decode(app_info_bytes);
   const info_start = `"${appId}"`;
   const info_start_idx = app_info_str.indexOf(info_start);
   const app_info_obj = app_info_str.slice(info_start_idx + info_start.length);
@@ -140,11 +142,13 @@ async function prefetch(
   const output = await command.output();
 
   if (!output.success) {
-    console.error(new TextDecoder().decode(output.stdout));
+    console.error(utf8Decoder.decode(output.stdout));
     throw new Error(`Prefetching failed with code ${output.code}`);
   }
 
-  return new TextDecoder().decode(output.stdout);
+  return utf8Decoder
+    .decode(output.stdout)
+    .trim();
 }
 
 function usage(): never {

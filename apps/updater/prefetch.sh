@@ -4,6 +4,9 @@
 
 set -e
 
+# Redirect all stdout to stderr, but save reference to original stdout
+exec 3>&1 >&2
+
 # Enable new nix features
 export NIX_CONFIG="experimental-features = nix-command"
 
@@ -23,15 +26,16 @@ if [ -n "$debug" ]; then
 	args+=(-debug)
 fi
 
-echo "DepotDownloader ${args[*]} -dir ${downloadDir}" >&2
+echo "DepotDownloader ${args[*]} -dir ${downloadDir}"
 DepotDownloader \
 	"${args[@]}" \
-	-dir "${downloadDir}" >&2
+	-dir "${downloadDir}"
 
 if [ -n "$addToStore" ]; then
     echo "Adding depot to store"
-    nix store add-path --name "${name:?}" "${downloadDir}" >&2
+    nix store add-path --name "${name:?}" "${downloadDir}"
 fi
-nix hash path "${downloadDir}"
+
+nix hash path "${downloadDir}" >&3
 
 rm -rf "${downloadDir}"
