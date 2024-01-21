@@ -1,0 +1,15 @@
+{
+  "appId": 2394010,
+  "depotId": 2394012,
+  "name": "palworld-server",
+  "branches": {
+    "public": "13225464"
+  },
+  "builds": {
+    "13225464": {
+      "hash": "sha256-NEnskCOl031yb0+jmsWkFHMZVVrRzM4BLLVZGko1Jk8=",
+      "manifestId": "4603741190199642564",
+      "version": "13225464"
+    }
+  }
+}

@@ -5,6 +5,7 @@
 }: let
   pkgsToImport = {
     "7-days-to-die" = ./7-days-to-die;
+    palworld = ./palworld;
     stationeers = ./stationeers;
   };
 
