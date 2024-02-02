@@ -107,7 +107,7 @@ in {
             echo "${n} already exists and isn't a directory, moving"
             mv "${n}" "${n}.bak"
           fi
-          ${pkgs.rsync}/bin/rsync -avu "${v}" "${n}"
+          ${pkgs.rsync}/bin/rsync -avu "${v}/" "${n}"
         '')
         dirs));
 }
