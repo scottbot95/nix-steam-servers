@@ -29,6 +29,7 @@ in {
 
         script = ''
           cd ${conf.datadir}
+          chmod +x ${conf.executable}
           ${conf.executable} ${concatStringsSep " \\\n" conf.args}
         '';
 
