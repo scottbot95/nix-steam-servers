@@ -3,13 +3,18 @@
   "depotId": 2394012,
   "name": "palworld-server",
   "branches": {
-    "public": "13225464"
+    "public": "13312441"
   },
   "builds": {
     "13225464": {
       "hash": "sha256-NEnskCOl031yb0+jmsWkFHMZVVrRzM4BLLVZGko1Jk8=",
       "manifestId": "4603741190199642564",
       "version": "13225464"
+    },
+    "13312441": {
+      "hash": "sha256-IoI5Up+Vj6Rti9BhPH2e1o+TbpjIGmcWCc5bCV8M2Ps=",
+      "manifestId": "4190579964382773830",
+      "version": "13312441"
     }
   }
 }
