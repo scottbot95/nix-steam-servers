@@ -8,6 +8,30 @@ with lib; let
   baseCfg = config.services.steam-servers;
   cfg = baseCfg.palworld;
   enabledServers = filterAttrs (_: conf: conf.enable) cfg;
+  # settingsFormat = pkgs.formats.ini {};
+  settingsFormat = {
+    generate = name: value: let
+      optionSettings =
+        mapAttrsToList
+        (optName: optVal: let
+          optType = builtins.typeOf optVal;
+          encodedVal =
+            if optType == "string"
+            then "\"${optVal}\""
+            else if optType == "bool"
+            then
+              if optVal
+              then "True"
+              else "False"
+            else optVal;
+        in "${optName}=${encodedVal}")
+        value;
+    in
+      builtins.toFile name ''
+        [/Script/Pal.PalGameWorldSettings]
+        OptionSettings=(${concatStringsSep "," optionSettings})
+      '';
+  };
 in {
   imports = [./options.nix];
 
@@ -24,29 +48,35 @@ in {
 
     services.steam-servers.servers =
       mapAttrs'
-      (name: conf:
+      (name: conf: let
+        settingsFile = settingsFormat.generate "PalWorldSettings.ini" conf.worldSettings;
+      in
         nameValuePair "palworld-${name}" {
           # inherit args;
           inherit (conf) enable datadir;
 
-          symlinks = {
-            "${baseCfg.datadir}/.steam/sdk64/steamclient.so" = "${pkgs.steamworks-sdk-redist}/lib/steamclient.so";
-            "Pal/Binaries" = "${conf.package}/Pal/Binaries";
-            "Pal/Content" = "${conf.package}/Pal/Content";
-            "Pal/Plugins" = "${conf.package}/Pal/Plugins";
-            Engine = "${conf.package}/Engine";
-          };
-
           dirs = {
+            Pal = "${conf.package}/Pal";
+            Engine = "${conf.package}/Engine";
           };
 
           files = {
             # Copy start script since it derefernces symlinks to find the server root dir
             "PalServer.sh" = "${conf.package}/PalServer.sh";
-            # "Pal/Saved/Config/LinuxServer/PalWorldSettings.ini" = settingsFile;
+
+            "Pal/Saved/Config/LinuxServer/PalWorldSettings.ini" = settingsFile;
           };
 
-          executable = "./PalServer.sh";
+          executable = "chmod +x ${conf.datadir}/PalServer.sh; ${pkgs.steam-run}/bin/steam-run ${conf.datadir}/PalServer.sh";
+
+          args =
+            [
+              "-port=${toString conf.port}"
+              "-useperfthreads"
+              "-NoAsyncLoadingThread"
+              "-UseMultithreadForDS"
+            ]
+            ++ conf.extraArgs;
         })
       cfg;
 
@@ -58,6 +88,12 @@ in {
             path = with pkgs; [
               xdg-user-dirs
             ];
+
+            serviceConfig = {
+              # Palworld needs namespaces and system calls
+              RestrictNamespaces = false;
+              SystemCallFilter = [];
+            };
           }
       )
       enabledServers;

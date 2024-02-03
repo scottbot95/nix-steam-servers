@@ -9,8 +9,6 @@ with lib; let
   moduleLib = import ../lib.nix lib;
   inherit (moduleLib) mkOpt;
 
-  settingsFormat = pkgs.formats.ini {};
-
   serverModule = {name, ...}: {
     options = {
       enable = mkEnableOption (mdDoc "Palworld Dedicated Server");
@@ -37,8 +35,15 @@ with lib; let
         description = mdDoc "Whether to open ports in the firewall.";
       };
 
+      port = mkOption {
+        type = types.port;
+        default = 8211;
+        description = mdDoc "UDP port to listen on";
+      };
+
       worldSettings = mkOption {
-        inherit (settingsFormat) type;
+        # inherit (settingsFormat) type;
+        type = types.attrs;
         default = {};
         description = mdDoc "World settings used to generate PalWorldSettings.ini";
       };
