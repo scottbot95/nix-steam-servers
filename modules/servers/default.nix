@@ -29,7 +29,6 @@ in {
 
         script = ''
           cd ${conf.datadir}
-          chmod +x ${conf.executable} || true # Still try to start if this fails
           ${conf.executable} ${concatStringsSep " \\\n" conf.args}
         '';
 
