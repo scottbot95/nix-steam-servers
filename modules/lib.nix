@@ -108,6 +108,7 @@ in {
             mv "${n}" "${n}.bak"
           fi
           ${pkgs.rsync}/bin/rsync -avu "${v}/" "${n}"
+          chmod -R u+w "${n}"
         '')
         dirs));
 }
