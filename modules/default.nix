@@ -22,11 +22,13 @@ in {
 
   flake.nixosModules.default = {
     config,
+    pkgs,
     lib,
     ...
   }:
     with lib; let
       cfg = config.services.steam-servers;
+      userHome = config.users.users.${cfg.user}.home;
       anyServersEnabled =
         any
         (conf: conf.enable)
@@ -44,33 +46,20 @@ in {
           inputs.steam-fetcher.overlays.default
         ];
 
-        # Can't use tmpfiles because tmpfiles won't create directories with different owner than parent
-        systemd.services."make-steam-servers-dir" = let
-          services =
-            map
-            (name: "${name}.service")
-            (builtins.attrNames cfg.servers);
-        in {
-          wantedBy = services;
-          before = services;
-
-          script = ''
-            mkdir -p ${cfg.datadir}
-            chown ${cfg.user}:${cfg.group} ${cfg.datadir}
-          '';
-
-          serviceConfig = {
-            Type = "oneshot";
-          };
-        };
-
-        users.users.${cfg.user} = {
+        users.users."${cfg.user}" = {
           isSystemUser = true;
           home = "${cfg.datadir}";
-          group = "${cfg.group}";
+          createHome = true;
+          homeMode = "750";
+          inherit (cfg) group;
         };
 
-        users.groups.${cfg.group} = {};
+        users.groups."${cfg.group}" = {};
+
+        systemd.tmpfiles.rules = [
+          "d ${userHome}/.steam 0755 ${cfg.user} ${cfg.user} - -"
+          "L+ ${userHome}/.steam/sdk64 - - - - ${pkgs.steamworks-sdk-redist}/lib"
+        ];
       };
     };
 }

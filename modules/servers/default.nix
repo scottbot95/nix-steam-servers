@@ -67,6 +67,16 @@ in {
           User = mkDefault "${baseCfg.user}";
           Group = mkDefault "${baseCfg.group}";
 
+          RuntimeDirectory = mkDefault "steam-servers";
+          RuntimeDirectoryPreserve = mkDefault true;
+
+          # These don't use mkDefault as they are inherent to how this module works
+          # Type = "forking";
+          # GuessMainPID = true;
+
+          PrivateDevices = mkDefault true;
+          PrivateTmp = mkDefault true;
+          PrivateUsers = mkDefault true;
           ProtectClock = mkDefault true;
           ProtectProc = mkDefault "noaccess";
           ProtectKernelLogs = mkDefault true;
@@ -74,7 +84,6 @@ in {
           ProtectKernelTunables = mkDefault true;
           ProtectControlGroups = mkDefault true;
           ProtectHostname = mkDefault true;
-          PrivateDevices = mkDefault true;
           RestrictRealtime = mkDefault true;
           RestrictNamespaces = mkDefault true;
           LockPersonality = mkDefault true;
