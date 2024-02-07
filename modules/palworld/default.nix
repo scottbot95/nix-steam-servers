@@ -23,7 +23,7 @@ with lib; let
               if optVal
               then "True"
               else "False"
-            else optVal;
+            else toString optVal;
         in "${optName}=${encodedVal}")
         value;
     in
