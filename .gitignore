@@ -8,3 +8,6 @@
 
 # per-commit
 .pre-commit-config.yaml
+
+# NixOS Test files
+.nixos-test-history
