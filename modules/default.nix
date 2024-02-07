@@ -57,7 +57,7 @@ in {
         users.groups."${cfg.group}" = {};
 
         systemd.tmpfiles.rules = [
-          "d ${userHome}/.steam 0755 ${cfg.user} ${cfg.user} - -"
+          "d ${userHome}/.steam 0755 ${cfg.user} ${cfg.group} - -"
           "L+ ${userHome}/.steam/sdk64 - - - - ${pkgs.steamworks-sdk-redist}/lib"
         ];
       };
