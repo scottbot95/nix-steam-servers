@@ -55,6 +55,8 @@ in {
           # inherit args;
           inherit (conf) enable datadir;
 
+          useTmux = true;
+
           dirs = {
             Pal = "${conf.package}/Pal";
             Engine = "${conf.package}/Engine";

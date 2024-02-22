@@ -22,7 +22,7 @@ with lib; let
 
       datadir = mkOption {
         type = types.path;
-        default = "${baseCfg.datadir}/palworld/${name}";
+        default = "${baseCfg.datadir}/palworld-${name}";
         defaultText = literalExpression "\${services.steam-servers.datadir}/palworld/\${name}";
         description = mdDoc ''
           Directory to store save state of the game server. (eg world, saves, etc)
