@@ -3,10 +3,11 @@
   "depotId": 600762,
   "name": "stationeers-server",
   "branches": {
-    "public": "12001212",
-    "beta": "12923784",
+    "public": "13123011",
+    "beta": "13165591",
     "devbranch": "11423122",
-    "previous": "11427657"
+    "previous": "11427657",
+    "prerocket": "12001212"
   },
   "builds": {
     "11423122": {
@@ -38,6 +39,16 @@
       "hash": "sha256-9OPJtnPVloQJN8IzT1v3pe9K3IV9/k0GLFqWrQ8Vo6U=\n",
       "manifestId": "5167670279537842837",
       "version": "0.2.4646.21500"
+    },
+    "13123011": {
+      "hash": "sha256-pFz1GgMJVEFoUzrFDu8hWpAB8UtyNisK8l9vgMB9mk4=\n",
+      "manifestId": "7624759452989841933",
+      "version": "13123011"
+    },
+    "13165591": {
+      "hash": "sha256-Oco9gMYIj0cwOPvhi2pakfB2lduB2ZiK4BdnEw0P24E=\n",
+      "manifestId": "8925249098237091857",
+      "version": "13165591"
     }
   }
 }
