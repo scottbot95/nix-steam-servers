@@ -67,7 +67,7 @@ in {
             "Pal/Saved/Config/LinuxServer/PalWorldSettings.ini" = settingsFile;
           };
 
-          executable = "chmod +x ${conf.datadir}/PalServer.sh; ${pkgs.steam-run}/bin/steam-run ${conf.datadir}/PalServer.sh";
+          executable = "${pkgs.steam-run}/bin/steam-run ${conf.datadir}/PalServer.sh";
 
           args =
             [

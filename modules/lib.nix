@@ -93,6 +93,7 @@ in {
               gsub("@"varname"@", ENVIRON[varname])
             print
           }' "${v}" > "${n}"
+          chmod --reference="${v}" "${n}"
         '')
         files));
 
