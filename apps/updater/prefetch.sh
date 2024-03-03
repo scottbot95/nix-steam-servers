@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Mostly copied from https://github.com/nix-community/steam-fetcher/blob/2033f99c7aee506f5af18026a3cab1c93bd0439f/fetch-steam/builder.sh
 

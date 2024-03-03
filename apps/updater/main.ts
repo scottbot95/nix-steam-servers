@@ -1,5 +1,10 @@
 import { parseArgs } from 'https://deno.land/std@0.208.0/cli/parse_args.ts';
+import * as path from "https://deno.land/std@0.188.0/path/mod.ts";
 import { LockFile, SteamObject, parseObject } from './parser.ts'
+
+const __filename = path.fromFileUrl(import.meta.url);
+// Without trailing slash
+const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
 
 const utf8Decoder = new TextDecoder();
 
@@ -94,6 +99,7 @@ async function updateLockFile(
 const main = async () => {
   const args = parseArgs(Deno.args, {
     alias: {
+      "a": "add-to-store",
       "d": "dry-run"
     },
     boolean: ["add-to-store", "dry-run", "help"],
@@ -131,7 +137,7 @@ async function prefetch(
   branch: string,
   addToStore: boolean,
 ): Promise<string> {
-  const command = new Deno.Command("./apps/updater/prefetch.sh", {
+  const command = new Deno.Command(`${__dirname}/prefetch.sh`, {
       env: {
           appId, depotId, manifestId, branch,
           name: `${name}-depot`,
