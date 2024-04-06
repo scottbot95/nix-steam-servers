@@ -44,6 +44,10 @@ in {
           })
         (builtins.attrValues enabledServers));
 
+    systemd.tmpfiles.rules = [
+      "d ${baseCfg.datadir}/stationeers 0750 ${baseCfg.user} ${baseCfg.group} - -"
+    ];
+
     services.steam-servers.servers =
       mapAttrs'
       (name: conf: let

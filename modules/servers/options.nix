@@ -90,6 +90,31 @@ with lib; let
           Files copied this way will be removed after service shutdown.
         '';
       };
+
+      useTmux = mkOption {
+        type = types.bool;
+        default = false;
+        description = mdDoc ''
+          Whether or not to run server inside a tmux session.
+          This can be useful for servers that have a console you can run commands in.
+
+          If enabled, a tmux socket will be created at `$RUNTIME_DIRECTORY/steam-servers/''${name}`
+          and the server executable will be ran inside the tmux session.
+
+          WARNING: At this time terminal output from tmux is not sent to journald.
+          This means that you will NOT have persistant logs without some other mechanism.
+          This can make debuging server crashes VERY difficult, but is necessary for some servers
+        '';
+      };
+      tmuxStopKeys = mkOption {
+        type = types.str;
+        default = "^C";
+        description = mdDoc ''
+          When using tmux, what keys to send via `tmux send-keys` to
+          shutdown the server.
+        '';
+        example = "/stop Enter";
+      };
     };
   };
 in {
