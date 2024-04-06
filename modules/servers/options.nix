@@ -100,6 +100,10 @@ with lib; let
 
           If enabled, a tmux socket will be created at `$RUNTIME_DIRECTORY/steam-servers/''${name}`
           and the server executable will be ran inside the tmux session.
+
+          WARNING: At this time terminal output from tmux is not sent to journald.
+          This means that you will NOT have persistant logs without some other mechanism.
+          This can make debuging server crashes VERY difficult, but is necessary for some servers
         '';
       };
       tmuxStopKeys = mkOption {

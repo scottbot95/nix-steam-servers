@@ -46,6 +46,10 @@ in {
           })
         (builtins.attrValues enabledServers));
 
+    systemd.tmpfiles.rules = [
+      "d ${baseCfg.datadir}/palworld 0750 ${baseCfg.user} ${baseCfg.group} - -"
+    ];
+
     services.steam-servers.servers =
       mapAttrs'
       (name: conf: let
@@ -54,8 +58,6 @@ in {
         nameValuePair "palworld-${name}" {
           # inherit args;
           inherit (conf) enable datadir;
-
-          useTmux = true;
 
           dirs = {
             Pal = "${conf.package}/Pal";

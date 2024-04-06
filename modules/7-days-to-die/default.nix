@@ -44,6 +44,10 @@ in {
             })
           (builtins.attrValues enabledServers));
 
+      systemd.tmpfiles.rules = [
+        "d ${baseCfg.datadir}/7-days-to-die 0750 ${baseCfg.user} ${baseCfg.group} - -"
+      ];
+
       systemd.services =
         mapAttrs'
         (

@@ -40,15 +40,6 @@ in {
       in
         mkMerge [
           (mkIf conf.useTmux {
-            preStart = ''
-              if ! [[ -p "$PIPE" ]]; then
-                rm -f "$PIPE"
-              fi
-              mkfifo "$PIPE"
-            '';
-            postStop = ''
-              rm "$PIPE"
-            '';
             serviceConfig = let
               tmux = "${getExe pkgs.tmux}";
               tmuxSock = "$RUNTIME_DIRECTORY/${name}.sock";
@@ -60,21 +51,9 @@ in {
               Type = "forking";
               GuessMainPID = true;
 
-              ExecStart = let
-                startWithLogging = pkgs.writeShellScript "${name}-run-server" ''
-                  systemd-cat < $PIPE &
-                  exec 3>$PIPE
-
-                  script --flush --quiet -c "${startServer}" "$PIPE"
-
-                  exec 3>&-
-                '';
-                launchTmux = pkgs.writeShellScript "${name}-start-tmux" ''
-                  ${tmux} -S ${tmuxSock} new -d ${startWithLogging}
-                  # ${tmux} -S ${tmuxSock} new -d ${startServer}
-                '';
-              in
-                launchTmux;
+              ExecStart = pkgs.writeShellScript "${name}-start-tmux" ''
+                ${tmux} -S ${tmuxSock} new -d ${startServer}
+              '';
 
               ExecStop = pkgs.writeShellScript "${name}-stop-tmux" ''
                 if ! [ -d "/proc/$MAINPID" ]; then
@@ -83,9 +62,6 @@ in {
 
                 ${tmux} -S ${tmuxSock} send-keys ${conf.tmuxStopKeys}
               '';
-            };
-            environment = {
-              PIPE = "${conf.datadir}/logs.pipe";
             };
           })
           (mkIf (!conf.useTmux) {
