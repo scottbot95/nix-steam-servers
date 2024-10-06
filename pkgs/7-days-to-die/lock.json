@@ -3,7 +3,7 @@
   "depotId": 294422,
   "name": "7-days-to-die-server",
   "branches": {
-    "public": "12696583",
+    "public": "15812436",
     "alpha10.4": "480993",
     "alpha11.6": "658147",
     "alpha12.5": "745252",
@@ -22,7 +22,9 @@
     "alpha21.1": "11888696",
     "alpha21.2": "12696583",
     "alpha9.3": "385244",
-    "latest_experimental": "12696583"
+    "latest_experimental": "15812436",
+    "v1.1": "15812436",
+    "v1.0": "15378458"
   },
   "builds": {
     "385244": {
@@ -114,6 +116,16 @@
       "hash": "sha256-occY0s1Co05Jw+SiK4VwXS3RsL2SceKVNVqnLo+vTDE=\n",
       "manifestId": "1977371197884973023",
       "version": "A21.2"
+    },
+    "15378458": {
+      "hash": "sha256-CNDvwDj5UlfiAdu6UiUEPqPvgbUm0m15DmFUQIeR7EU=",
+      "manifestId": "1412324900064939868",
+      "version": "15378458"
+    },
+    "15812436": {
+      "hash": "sha256-N9mn7KQotv5CpiUQUnxrfG/GRly1hRzTCTaMqyRPn48=",
+      "manifestId": "2366383150472453701",
+      "version": "15812436"
     }
   }
 }
