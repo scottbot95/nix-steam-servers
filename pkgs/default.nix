@@ -5,6 +5,7 @@
 }: let
   pkgsToImport = {
     "7-days-to-die" = ./7-days-to-die;
+    factorio = ./factorio;
     palworld = ./palworld;
     stationeers = ./stationeers;
   };
@@ -14,11 +15,7 @@
     (_: file: pkgs.callPackage file {})
     (pkgsToImport // {mkSteamPackage = ./mkSteamPackage.nix;});
 in {
-  perSystem = {
-    config,
-    system,
-    ...
-  }: let
+  perSystem = {system, ...}: let
     pkgs = import inputs.nixpkgs {
       inherit system;
       overlays = [
